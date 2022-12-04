@@ -28,7 +28,7 @@ object SolutionB extends App {
     }
     .sum
 
-  println(result)
+  println(result) // 870
 
 
 

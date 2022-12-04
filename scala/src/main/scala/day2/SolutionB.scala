@@ -54,7 +54,7 @@ object SolutionB extends App {
     case (Choice.Scissors, Choice.Rock)     => 0
   }
 
-  def findPlay(me: Choice, outcome: Outcome) = (me, outcome) match {
+  def findPlay(them: Choice, desiredOutcome: Outcome) = (them, desiredOutcome) match {
     case (Choice.Rock, Outcome.Lose)     => Choice.Scissors
     case (Choice.Rock, Outcome.Win)      => Choice.Paper
     case (Choice.Rock, Outcome.Draw)     => Choice.Rock
@@ -64,7 +64,6 @@ object SolutionB extends App {
     case (Choice.Scissors, Outcome.Lose) => Choice.Paper
     case (Choice.Scissors, Outcome.Win)  => Choice.Rock
     case (Choice.Scissors, Outcome.Draw) => Choice.Scissors
-
   }
 
   val input = Files.readString(Paths.get("src/main/resources/day2/input_a.txt"))
