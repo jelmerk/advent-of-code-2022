@@ -1,27 +1,12 @@
 package day5
 
 import java.nio.file.{Files, Paths}
-import scala.collection.mutable
-import scala.collection.mutable.Stack
 
 object SolutionA extends App {
 
   case class Command(amount: Int, from: Int, to: Int)
 
   val input = Files.readString(Paths.get("src/main/resources/day5/input_a.txt"))
-
-//
-//  val input =
-//    """    [D]
-//      |[N] [C]
-//      |[Z] [M] [P]
-//      | 1   2   3
-//      |
-//      |move 1 from 2 to 1
-//      |move 3 from 1 to 3
-//      |move 2 from 2 to 1
-//      |move 1 from 1 to 2""".stripMargin
-
 
   val Array(state, instructions) = input.split("\n\n")
 
@@ -48,17 +33,12 @@ object SolutionA extends App {
     .map { case CommandString(amount, from, to) => Command(amount.toInt, from.toInt, to.toInt) }
 
 
-//  commands.foreach(println)
-
   val newState = commands
     .foldLeft(stacks) {
       case (acc, Command(amount, from, to)) =>
 
-        val fromStack = acc(from)
-        val toStack = acc(to)
-
-        val (taken, newFromStack) = fromStack.splitAt(amount)
-        val newToStack = taken.reverse ::: toStack
+        val (taken, newFromStack) = acc(from).splitAt(amount)
+        val newToStack = taken.reverse ::: acc(to)
 
         val updated = acc
           .updated(from, newFromStack)
