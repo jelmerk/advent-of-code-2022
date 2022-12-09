@@ -21,7 +21,7 @@ object SolutionB extends App {
   }
   class Grid private (values: Array[Array[Int]]) {
 
-    val height: Int = values.size
+    val height: Int = values.length
 
     val width: Int = values.headOption.map(_.length).getOrElse(0)
 
