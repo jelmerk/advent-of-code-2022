@@ -66,15 +66,15 @@ object SolutionA extends App {
   }
 
   def createKnotPositions(headPositions: Stream[Position], start: Position): Stream[Position] = headPositions match {
-    case Empty => Stream.empty
+    case Empty => start #:: Stream.empty
     case head #:: remaining =>
-      if (start.touching(head)) start #:: createKnotPositions(remaining, start)
+      if (start.touching(head)) createKnotPositions(remaining, start)
       else {
         val xOffset = math.signum(head.x - start.x)
         val yOffset = math.signum(head.y - start.y)
 
         val position = Position(start.x + xOffset, start.y + yOffset)
-        position #:: createKnotPositions(remaining, position)
+        start #:: createKnotPositions(remaining, position)
       }
   }
 

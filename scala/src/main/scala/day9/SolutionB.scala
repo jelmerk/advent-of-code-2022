@@ -66,7 +66,7 @@ object SolutionB extends App {
   }
 
   def createKnotPositions(headPositions: Stream[Position], start: Position): Stream[Position] = headPositions match {
-    case Empty => Stream.empty
+    case Empty => start #:: Stream.empty
     case head #:: remaining =>
       if (start.touching(head)) start #:: createKnotPositions(remaining, start)
       else {
@@ -74,15 +74,12 @@ object SolutionB extends App {
         val yOffset = math.signum(head.y - start.y)
 
         val position = Position(start.x + xOffset, start.y + yOffset)
-        position #:: createKnotPositions(remaining, position)
+        start #:: createKnotPositions(remaining, position)
       }
   }
 
   val headPositions = createHeadPositions(moves, Position(x = 0, y = 0))
-
-  val tailPositions = (1 to 9).foldLeft(headPositions) { case (acc, _) =>
-    createKnotPositions(acc, Position(x = 0, y = 0))
-  }
+  val tailPositions = (1 to 9).foldLeft(headPositions) { case (acc, _) => createKnotPositions(acc, Position(x = 0, y = 0)) }
 
   val result = tailPositions.toSet.size
 
