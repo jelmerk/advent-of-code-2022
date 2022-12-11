@@ -1,0 +1,16 @@
+# Intellij idea
+.idea/
+.bsp/
+*.iml
+
+# vscode with metals
+.bloop/
+.vscode/
+.metals/
+metals.sbt
+
+# output folders
+target/
+
+# MacOS
+.DS_Store
