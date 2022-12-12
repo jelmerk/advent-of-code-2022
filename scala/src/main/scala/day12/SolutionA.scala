@@ -37,23 +37,6 @@ object SolutionA extends App {
 
   val characterGrid = new Grid(asCharacters)
 
-  val positions = for {
-    y <- 0 until characterGrid.height
-    x <- 0 until characterGrid.width
-  } yield Position(x, y)
-
-  val start = positions
-    .find { case Position(x, y) =>
-      characterGrid.valueAt(x, y) == 'S'
-    }
-    .getOrElse(throw new IllegalArgumentException("No start found."))
-
-  val end = positions
-    .find { case Position(x, y) =>
-      characterGrid.valueAt(x, y) == 'E'
-    }
-    .getOrElse(throw new IllegalArgumentException("No end found."))
-
   val asValues = asCharacters.map {
     _.map {
       case 'S' => 1
@@ -64,35 +47,39 @@ object SolutionA extends App {
 
   val grid = new Grid(asValues)
 
-  val nodes = (
-    for {
-      y <- 0 until grid.height
-      x <- 0 until grid.width
-    } yield {
-      val connections = for {
-        (xx, yy) <- Set(
-          (x, y + 1),
-          (x, y - 1),
-          (x - 1, y),
-          (x + 1, y)
-        )
-        if xx >= 0 && yy >= 0 && xx < grid.width && yy < grid.height
-        if grid.valueAt(xx, yy) <= grid.valueAt(x, y) + 1
-      } yield toId(xx, yy, grid)
+  val positions = for {
+    y <- 0 until characterGrid.height
+    x <- 0 until characterGrid.width
+  } yield Position(x, y)
 
-      val id = toId(x, y, grid)
-      val weight = 1
-      id -> connections.map(connectedId => connectedId -> weight).toMap
-    }).toMap
+  for {
+    start <- positions.collectFirst { case Position(x, y) if characterGrid.valueAt(x, y) == 'S' => toId(x, y, grid) }
+    end <- positions.collectFirst { case Position(x, y) if characterGrid.valueAt(x, y) == 'E' => toId(x, y, grid) }
+  } {
 
-  val graph = SimpleGraph(nodes)
+    val nodes = positions
+      .map { case Position(x, y) =>
+        val connections = for {
+          (xx, yy) <- Set(
+            (x, y + 1),
+            (x, y - 1),
+            (x - 1, y),
+            (x + 1, y)
+          )
+          if xx >= 0 && yy >= 0 && xx < grid.width && yy < grid.height
+          if grid.valueAt(xx, yy) <= grid.valueAt(x, y) + 1
+        } yield toId(xx, yy, grid)
 
-  val startNode = toId(start.x, start.y, grid)
+        val id = toId(x, y, grid)
+        val weight = 1
+        id -> connections.map(connectedId => connectedId -> weight).toMap
+      }.toMap
 
-  val endNode = toId(end.x, end.y, grid)
+    val graph = SimpleGraph(nodes)
 
-  DijkstraImmutable.shortestPath(graph)(startNode, endNode)
-    .map(_.size - 1)
-    .foreach(println) // 497
+    DijkstraImmutable.shortestPath(graph)(start, end)
+      .map(_.size - 1)
+      .foreach(println) // 497
+  }
 
 }
