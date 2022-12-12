@@ -93,8 +93,7 @@ object SolutionA extends App {
   val stages: List[Stage] = groups
     .map { lines =>
       val id = lines(0).drop(7).dropRight(1).toInt
-
-      val operationString = lines(2).drop(13).drop(6) // TODO
+      val operationString = lines(2).drop(13).drop(6)
       val divider = lines(3).drop(21).toInt
       val passMonkey = lines(4).drop(29).toInt
       val failMonkey = lines(5).drop(30).toInt
