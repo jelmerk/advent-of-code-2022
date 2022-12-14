@@ -70,8 +70,7 @@ object SolutionB extends App {
       case ']' :: tail =>
         val List(collected, ListOfValues(elements), rest @ _*) = stack
         parseInput(tail,  ListOfValues(elements :+ collected) :: rest.toList )
-      case ',' :: tail => parseInput(tail, stack)
-      case ' ' :: tail => parseInput(tail, stack)
+      case (',' | ' ') :: tail => parseInput(tail, stack)
       case list =>
         val (taken, remaining) = list.span(_.isDigit)
         val value = taken.mkString.toInt
